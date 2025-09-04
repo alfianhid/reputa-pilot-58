@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { QrCode, Upload, Download, Send, Users, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import QRCode from "qrcode";
 
 interface Contact {
   id: string;
@@ -30,11 +31,32 @@ export default function Outreach() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [campaignName, setCampaignName] = useState("");
   const [customMessage, setCustomMessage] = useState("");
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
   const { toast } = useToast();
 
-  // Generate QR Code (mock implementation)
-  const qrCodeUrl = "https://chart.googleapis.com/chart?cht=qr&chl=https%3A//reputa.ai/r/demo-business&chs=200x200";
   const reviewUrl = "https://g.page/your-business/review";
+
+  // Generate QR Code
+  useEffect(() => {
+    const generateQR = async () => {
+      try {
+        const dataUrl = await QRCode.toDataURL(reviewUrl, {
+          width: 200,
+          margin: 2,
+          color: {
+            dark: '#000000',
+            light: '#FFFFFF'
+          }
+        });
+        setQrCodeDataUrl(dataUrl);
+      } catch (err) {
+        console.error('Failed to generate QR code:', err);
+        toast({ variant: "destructive", description: "Failed to generate QR code" });
+      }
+    };
+
+    generateQR();
+  }, [reviewUrl, toast]);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -78,7 +100,17 @@ export default function Outreach() {
   };
 
   const downloadQR = () => {
-    // Mock download
+    if (!qrCodeDataUrl) {
+      toast({ variant: "destructive", description: "QR code not ready yet" });
+      return;
+    }
+
+    const link = document.createElement('a');
+    link.download = 'review-qr-code.png';
+    link.href = qrCodeDataUrl;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
     toast({ description: "QR code downloaded!" });
   };
 
@@ -130,11 +162,20 @@ export default function Outreach() {
 
               <div className="flex justify-center">
                 <div className="p-4 bg-white rounded-lg border border-border shadow-soft">
-                  <img 
-                    src={qrCodeUrl} 
-                    alt="Review QR Code" 
-                    className="w-48 h-48"
-                  />
+                  {qrCodeDataUrl ? (
+                    <img 
+                      src={qrCodeDataUrl} 
+                      alt="Review QR Code" 
+                      className="w-48 h-48"
+                    />
+                  ) : (
+                    <div className="w-48 h-48 bg-muted rounded-lg flex items-center justify-center">
+                      <div className="text-center">
+                        <QrCode className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                        <p className="text-sm text-muted-foreground">Generating QR code...</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
