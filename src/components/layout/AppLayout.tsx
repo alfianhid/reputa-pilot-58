@@ -12,6 +12,8 @@ import {
   Menu,
   LogOut
 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -27,6 +29,24 @@ const navigation = [
 export function AppLayout({ children }: AppLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
+  const { signOut, user } = useAuth();
+  const { toast } = useToast();
+
+  const handleSignOut = async () => {
+    const { error } = await signOut();
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to sign out. Please try again.",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Signed out",
+        description: "You have been successfully signed out.",
+      });
+    }
+  };
 
   const SidebarContent = () => (
     <div className="flex h-full flex-col">
@@ -66,10 +86,17 @@ export function AppLayout({ children }: AppLayoutProps) {
         </ul>
 
         {/* User section */}
-        <div className="border-t border-border pt-6">
+        <div className="border-t border-border pt-6 space-y-3">
+          <div className="px-3 py-2">
+            <p className="text-xs text-muted-foreground">Signed in as</p>
+            <p className="text-sm font-medium text-foreground truncate">
+              {user?.email}
+            </p>
+          </div>
           <Button 
             variant="ghost" 
             className="w-full justify-start gap-x-3 text-muted-foreground hover:text-foreground"
+            onClick={handleSignOut}
           >
             <LogOut className="h-5 w-5" />
             Sign Out
