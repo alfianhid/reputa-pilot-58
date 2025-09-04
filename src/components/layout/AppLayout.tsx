@@ -86,40 +86,40 @@ export function AppLayout({ children }: AppLayoutProps) {
         <SheetContent side="left" className="w-72 p-0">
           <SidebarContent />
         </SheetContent>
-      </Sheet>
 
-      {/* Desktop sidebar */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-border bg-card">
-          <SidebarContent />
+        {/* Desktop sidebar */}
+        <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
+          <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-border bg-card">
+            <SidebarContent />
+          </div>
         </div>
-      </div>
 
-      {/* Main content */}
-      <div className="lg:pl-72">
-        {/* Mobile header */}
-        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-border bg-card px-4 shadow-soft lg:hidden">
-          <SheetTrigger asChild>
-            <Button variant="ghost" size="sm" className="focus-ring">
-              <Menu className="h-5 w-5" />
-            </Button>
-          </SheetTrigger>
-          <div className="flex-1" />
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-gradient-to-br from-primary to-primary-hover rounded flex items-center justify-center">
-              <MessageSquareQuote className="w-3 h-3 text-primary-foreground" />
+        {/* Main content */}
+        <div className="lg:pl-72">
+          {/* Mobile header */}
+          <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-border bg-card px-4 shadow-soft lg:hidden">
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="sm" className="focus-ring">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <div className="flex-1" />
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 bg-gradient-to-br from-primary to-primary-hover rounded flex items-center justify-center">
+                <MessageSquareQuote className="w-3 h-3 text-primary-foreground" />
+              </div>
+              <span className="text-lg font-bold text-gradient">Reputa AI</span>
             </div>
-            <span className="text-lg font-bold text-gradient">Reputa AI</span>
           </div>
-        </div>
 
-        {/* Page content */}
-        <main className="py-8">
-          <div className="px-4 sm:px-6 lg:px-8">
-            {children}
-          </div>
-        </main>
-      </div>
+          {/* Page content */}
+          <main className="py-8">
+            <div className="px-4 sm:px-6 lg:px-8">
+              {children}
+            </div>
+          </main>
+        </div>
+      </Sheet>
     </div>
   );
 }
