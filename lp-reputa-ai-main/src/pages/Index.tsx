@@ -1,0 +1,29 @@
+import Navigation from "@/components/Navigation";
+import HeroSection from "@/components/HeroSection";
+import ProblemSection from "@/components/ProblemSection";
+import FeaturesSection from "@/components/FeaturesSection";
+import HowItWorksSection from "@/components/HowItWorksSection";
+import TestimonialSection from "@/components/TestimonialSection";
+import PricingSection from "@/components/PricingSection";
+import FAQSection from "@/components/FAQSection";
+import FinalCTASection from "@/components/FinalCTASection";
+import Footer from "@/components/Footer";
+
+const Index = () => {
+  return (
+    <div className="min-h-screen bg-background">
+      <Navigation />
+      <HeroSection />
+      <ProblemSection />
+      <FeaturesSection />
+      <HowItWorksSection />
+      <TestimonialSection />
+      <PricingSection />
+      <FAQSection />
+      <FinalCTASection />
+      <Footer />
+    </div>
+  );
+};
+
+export default Index;
